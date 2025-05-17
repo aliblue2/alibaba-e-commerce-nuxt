@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Vazirmatn", "sans-serif";
+  --breakpoint-3xl: 120rem;
+  --color-primary: #ff6600;
+  --color-white-custom: #f4f4f4;
+  --color-black-custom: #f4f4f4;
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+}
