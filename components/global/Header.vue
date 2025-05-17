@@ -7,7 +7,7 @@
       <div class="flex items-center justify-between gap-5 w-full h-full">
         <div class="flex items-center justify-start gap-5">
           <CustomBtn btn-type="outline" class="md:hidden block">
-            <Menu :size="20"  />
+            <Menu :size="20" />
           </CustomBtn>
           <img :src="Logo" alt="logo-name" class="max-w-44" />
         </div>
@@ -17,7 +17,11 @@
             <ShoppingBag :size="20" />
           </CustomBtn>
           <CustomBtn>
-            <span class="md:block hidden"> Signup/login </span>
+            <span class="md:block hidden" v-if="isAuthenticated">profile</span>
+            <span class="md:block hidden" v-else-if="!isAuthenticated"
+              >signup/login</span
+            >
+
             <User2 :size="20" />
           </CustomBtn>
         </div>
@@ -30,6 +34,11 @@
 import { motion, useScroll, useTransform } from "motion-v";
 import Logo from "~/public/logo.png";
 import { Menu, ShoppingBag, User2 } from "lucide-vue-next";
+
+const authStore = useAuthStore();
+
+const { isAuthenticated } = storeToRefs(authStore);
+
 const { scrollY } = useScroll();
 const headerColor = useTransform(scrollY, [0, 400], ["#0000", "#fff"]);
 </script>

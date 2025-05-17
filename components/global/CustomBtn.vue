@@ -14,6 +14,7 @@
     }"
     class="flex items-center justify-center gap-5 font-medium p-2 rounded-xl transition-colors duration-300 cursor-pointer"
     :class="[customCss, btnClassType]"
+    @click="props.onClickHandler"
   >
     <slot></slot>
   </motion.button>
