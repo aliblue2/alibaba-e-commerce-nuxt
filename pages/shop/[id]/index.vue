@@ -2,9 +2,7 @@
   <ScopedLoading v-if="isPending" />
   <ScopedErrorCompo v-else-if="isError" />
   <section v-else-if="data" class="oveflow-hidden">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-      <img v-for="image in data.images" :src="image" :alt="data.title" />
-    </div>
+    <ProductsProductLanding :product="data" />
   </section>
 </template>
 

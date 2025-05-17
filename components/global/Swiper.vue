@@ -5,7 +5,7 @@
       :slides-per-view="1"
       :loop="true"
       :effect="'creative'"
-      class="mx-auto w-full max-w-[330px] rounded-xl md:max-w-[500px]"
+      class="mx-auto w-full max-w-[450px] rounded-xl md:max-w-[550px] min-h-[350px]"
       :pagination="{ clickable: true }"
       :autoplay="{
         delay: 8000,
