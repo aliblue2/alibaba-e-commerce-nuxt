@@ -1,14 +1,12 @@
-import { defineStore } from "pinia";
-
 interface userAuth {
-  accessToken: string | null;
-  refreshToken: string | null;
+  accessToken: string | undefined;
+  refreshToken: string | undefined;
 }
 
-export const useAuthStore = defineStore("auth", {
+export const useAuth = defineStore("auth", {
   state: (): userAuth => ({
-    accessToken: null,
-    refreshToken: null,
+    accessToken: undefined,
+    refreshToken: undefined,
   }),
 
   actions: {
@@ -21,10 +19,10 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("refreshToken", payload.refreshToken);
       }
     },
-    clearTokens() {
-      this.accessToken = null;
-      this.refreshToken = null;
 
+    clearTokens() {
+      this.accessToken = undefined;
+      this.refreshToken = undefined;
       if (process.client) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
@@ -36,7 +34,8 @@ export const useAuthStore = defineStore("auth", {
       const refreshToken = localStorage.getItem("refreshToken");
 
       if (accessToken && refreshToken) {
-        this.setTokens({ accessToken, refreshToken });
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
       }
     },
   },

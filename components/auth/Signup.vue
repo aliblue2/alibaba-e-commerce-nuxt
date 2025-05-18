@@ -38,6 +38,12 @@
       </CustomBtn>
     </form>
   </div>
+  <RouterLink
+    to="/auth?mode=login"
+    class="text-primary font-medium hover:underline"
+  >
+    Do you have already aacount ? login
+  </RouterLink>
 </template>
 
 <script setup lang="ts">

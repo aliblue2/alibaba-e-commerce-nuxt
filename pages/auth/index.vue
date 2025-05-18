@@ -8,5 +8,7 @@ definePageMeta({
   layout: "auth-container",
 });
 const route = useRoute();
-let mode = route.query.mode || "login";
+const mode = computed(() => {
+  return (route.query.mode as string) || "login";
+});
 </script>

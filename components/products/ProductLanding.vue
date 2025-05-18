@@ -61,4 +61,8 @@ import type { Product } from "~/types/products";
 import { ShoppingBagIcon, MessageCircleDashed } from "lucide-vue-next";
 
 defineProps<{ product: Product }>();
+
+const basketStore = useBasketStore();
+
+const addToBasket = () => {};
 </script>
