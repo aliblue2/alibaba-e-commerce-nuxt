@@ -12,8 +12,9 @@
       bounce: 0.4,
       stiffness: 300,
     }"
+    :disabled="loading"
     class="flex items-center justify-center gap-5 font-medium p-2 rounded-xl transition-colors duration-300 cursor-pointer"
-    :class="[customCss, btnClassType]"
+    :class="[loading && 'bg-gray-300 text-white', customCss, btnClassType]"
     @click="props.onClickHandler"
   >
     <slot></slot>
@@ -22,18 +23,18 @@
 
 <script setup lang="ts">
 import { motion } from "motion-v";
-
 interface Props {
   type?: "button" | "reset" | "submit";
   btnType?: "primary" | "outline";
   onClickHandler?: () => void;
-  loading?: boolean;
   customCss?: string;
+  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   btnType: "primary",
   loading: false,
+  disabled: false,
   type: "button",
 });
 

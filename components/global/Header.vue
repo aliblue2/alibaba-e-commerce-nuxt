@@ -13,13 +13,18 @@
         </div>
         <NavbarNav class="md:flex hidden" />
         <div class="flex items-center justify-start gap-3">
-          <CustomBtn btn-type="outline">
-            <ShoppingBag :size="20" />
-          </CustomBtn>
-          <CustomBtn v-on:click-handler="authBtnClick">
+          <AnimatePresence>
+            <CustomBtn v-on:click-handler="dropDownToggler" btn-type="outline">
+              {{ allQunatites }}
+              <ShoppingBag :size="20" />
+            </CustomBtn>
+
+            <HeaderDropDown :items="basketItems" v-if="headerDropDownVis" />
+          </AnimatePresence>
+
+          <CustomBtn v-on:click-handler="authToggleBtnClick">
             <span class="md:block hidden" v-if="isAuthenticated">profile </span>
             <span class="md:block hidden" v-else>signup/login </span>
-
             <User2 :size="20" />
           </CustomBtn>
         </div>
@@ -29,18 +34,38 @@
 </template>
 
 <script setup lang="ts">
-import { motion, useScroll, useTransform } from "motion-v";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion-v";
 import Logo from "~/public/logo.png";
 import { Menu, ShoppingBag, User2 } from "lucide-vue-next";
+import { useAuth } from "~/stores/useAuth";
 const { scrollY } = useScroll();
 const headerColor = useTransform(scrollY, [0, 400], ["#0000", "#fff"]);
 const router = useRouter();
 const { isAuthenticated, loadTokens } = useAuth();
-onMounted(() => {
-  loadTokens();
+const basketStore = useBasketStore();
+
+const headerDropDownVis = ref(false);
+
+const dropDownToggler = () => {
+  headerDropDownVis.value = !headerDropDownVis.value;
+};
+
+const basketItems = computed(() => basketStore.getBasketItems);
+const allQunatites = computed(() => {
+  let qunatity = 0;
+  basketItems.value.map((item) => {
+    qunatity += item.quantity;
+  });
+
+  return qunatity;
 });
 
-const authBtnClick = () => {
+onMounted(() => {
+  loadTokens();
+  basketStore.loadBasket();
+});
+
+const authToggleBtnClick = () => {
   isAuthenticated ? router.push("/profile") : router.push("/auth");
 };
 </script>

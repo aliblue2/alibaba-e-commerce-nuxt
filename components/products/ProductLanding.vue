@@ -43,7 +43,11 @@
       </div>
       <p>retuntion policy : {{ product.returnPolicy }}</p>
       <div class="flex items-center w-full justify-between gap-5">
-        <CustomBtn btn-type="primary" custom-css="w-full">
+        <CustomBtn
+          @click-handler="addToBasket(product)"
+          btn-type="primary"
+          custom-css="w-full"
+        >
           <ShoppingBagIcon :size="24" />
           Add to basket
         </CustomBtn>
@@ -59,10 +63,7 @@
 <script lang="ts" setup>
 import type { Product } from "~/types/products";
 import { ShoppingBagIcon, MessageCircleDashed } from "lucide-vue-next";
+const props = defineProps<{ product: Product }>();
 
-defineProps<{ product: Product }>();
-
-const basketStore = useBasketStore();
-
-const addToBasket = () => {};
+const { addToBasket } = useBasketStore();
 </script>

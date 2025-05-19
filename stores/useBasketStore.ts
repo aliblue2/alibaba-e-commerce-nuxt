@@ -1,55 +1,75 @@
-import { defineStore } from "pinia";
 import type { Product } from "~/types/products";
 
-interface ProductBasket {
+export interface ProductItem {
   product: Product;
   quantity: number;
 }
-interface useBasketStore {
-  items: ProductBasket[];
+
+export interface BasketStore {
+  items: ProductItem[];
 }
 
-export const useBasketStore = defineStore("basketStore", {
-  state: (): useBasketStore => ({
+export const useBasketStore = defineStore("basket", {
+  state: (): BasketStore => ({
     items: [],
   }),
-
   actions: {
-    addToBasketStore(product: Product) {
-      const exsitingItem = this.items.findIndex(
+    addToBasket(product: Product) {
+      const existingItemIndex = this.items.findIndex(
         (item) => item.product.id === product.id
       );
 
-      if (exsitingItem !== -1) {
+      if (existingItemIndex !== -1) {
         const updatedItem = {
-          ...this.items[exsitingItem],
-          qunatity: (this.items[exsitingItem].quantity || 1) + 1,
+          ...this.items[existingItemIndex],
+          quantity: this.items[existingItemIndex].quantity + 1,
         };
 
-        this.items.splice(exsitingItem, 1, updatedItem);
+        this.items.splice(existingItemIndex, 1, updatedItem);
       } else {
         this.items.push({ product, quantity: 1 });
       }
-
       localStorage.setItem("basketItems", JSON.stringify(this.items));
     },
-    removeFromBasket(prodcut: Product) {
-      const filteredItems = this.items.filter(
-        (item) => item.product.id !== prodcut.id
+    removeFromBasket(product: Product) {
+      const finalItems = this.items.filter(
+        (item) => item.product.id !== product.id
       );
 
-      this.items = filteredItems;
+      this.items = finalItems;
       localStorage.setItem("basketItems", JSON.stringify(this.items));
     },
+    changeQuantity(productId: number, flag: "increase" | "decrease") {
+      const targetItemIndex = this.items.findIndex(
+        (item) => item.product.id === productId
+      );
 
+      if (flag === "increase") {
+        this.items[targetItemIndex].quantity += 1;
+      } else {
+        if (this.items[targetItemIndex].quantity > 1) {
+          this.items[targetItemIndex].quantity -= 1;
+        }
+      }
+      localStorage.setItem("basketItems", JSON.stringify(this.items));
+    },
     clearBasket() {
       this.items = [];
       localStorage.setItem("basketItems", JSON.stringify(this.items));
     },
-  },
 
+    loadBasket() {
+      const savedBasket = localStorage.getItem("basketItems");
+
+      if (savedBasket) {
+        const basketItems = JSON.parse(savedBasket);
+        this.items = [...basketItems];
+      }
+    },
+  },
   getters: {
-    getBasketItems: (state) => state.items,
-    getBasketItemsSize: (state) => state.items.length,
+    getBasketItems(): ProductItem[] {
+      return this.items;
+    },
   },
 });

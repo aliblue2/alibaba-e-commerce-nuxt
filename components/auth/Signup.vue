@@ -1,38 +1,32 @@
 <template>
   <div class="bg-white w-full max-w-[600px] mxa-auto p-5 rounded-2xl shadow-sm">
     <form
-      @submit="readValueOfEmailAdd"
-      class="flex flex-col items-center justify-start gap-5 w-8/12 mx-auto"
+      :submit="mutate"
+      class="flex flex-col items-center justify-start gap-5 w-10/12 mx-auto"
     >
       <CustomInput
-        name="firstname"
-        title="First Name :"
-        palceholder="alireza"
+        name="fullname"
         type="text"
-        ref="emailRef"
-      />
-      <CustomInput
-        name="lastname"
-        title="Last Name :"
-        palceholder="akbari"
-        type="text"
-        ref="passworRef"
+        title="fullName"
+        placeholder="ali akbari"
+        ref="nameRef"
       />
       <CustomInput
         name="email"
-        title="Email :"
-        palceholder="example.com"
         type="email"
+        title="email"
+        placeholder="email@example.com"
         ref="emailRef"
       />
       <CustomInput
         name="password"
-        title="Password : "
-        palceholder="****"
         type="password"
-        ref="passworRef"
+        title="password"
+        placeholder="***"
+        ref="passwordRef"
       />
-      <CustomBtn custom-css="w-full" type="submit">
+
+      <CustomBtn :loading="loading" custom-css="w-full" type="submit">
         Signup
         <UserPlus2 :size="24" />
       </CustomBtn>
@@ -48,16 +42,28 @@
 
 <script setup lang="ts">
 import { UserPlus2 } from "lucide-vue-next";
+import { signupFcHandler } from "~/requests/auth/signup";
+import { useMutation } from "@tanstack/vue-query";
 
 const emailRef = ref<InstanceType<
   typeof import("~/components/global/CustomInput.vue").default
-> | null>(null);
-const passworRef = ref<InstanceType<
+> | null>();
+const passwordRef = ref<InstanceType<
   typeof import("~/components/global/CustomInput.vue").default
-> | null>(null);
+> | null>();
+const nameRef = ref<InstanceType<
+  typeof import("~/components/global/CustomInput.vue").default
+> | null>();
 
-const readValueOfEmailAdd = () => {
-  event?.preventDefault();
-  console.log(emailRef.value?.modelValue);
-};
+const loading = ref(false);
+
+const { mutate } = useMutation({
+  mutationKey: ["signup-user"],
+  mutationFn: () =>
+    signupFcHandler(
+      nameRef.value!.modelVal,
+      emailRef.value!.modelVal,
+      passwordRef.value!.modelVal
+    ),
+});
 </script>

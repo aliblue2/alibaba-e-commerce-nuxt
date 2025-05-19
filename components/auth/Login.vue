@@ -1,22 +1,22 @@
 <template>
   <div class="bg-white w-full max-w-[600px] mxa-auto p-5 rounded-2xl shadow-sm">
     <form
-      @submit="readValueOfEmailAdd"
-      class="flex flex-col items-center justify-start gap-5 w-8/12 mx-auto"
+      @submit="LoginUserHandler"
+      class="flex flex-col items-center justify-start gap-5 w-10/12 mx-auto"
     >
       <CustomInput
         name="email"
-        title="Email :"
-        palceholder="example.com"
         type="email"
+        title="email"
+        placeholder="email@example.com"
         ref="emailRef"
       />
       <CustomInput
         name="password"
-        title="Password : "
-        palceholder="****"
         type="password"
-        ref="passworRef"
+        title="password"
+        placeholder="***"
+        ref="passwordRef"
       />
       <CustomBtn custom-css="w-full" type="submit">
         Login
@@ -38,12 +38,11 @@ import { LogInIcon } from "lucide-vue-next";
 const emailRef = ref<InstanceType<
   typeof import("~/components/global/CustomInput.vue").default
 > | null>(null);
-const passworRef = ref<InstanceType<
+const passwordRef = ref<InstanceType<
   typeof import("~/components/global/CustomInput.vue").default
 > | null>(null);
 
-const readValueOfEmailAdd = () => {
+const LoginUserHandler = () => {
   event?.preventDefault();
-  console.log(emailRef.value?.modelValue);
 };
 </script>
