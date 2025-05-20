@@ -17,12 +17,18 @@
     :class="[loading && 'bg-gray-300 text-white', customCss, btnClassType]"
     @click="props.onClickHandler"
   >
-    <slot></slot>
+    <slot v-if="!loading"></slot>
+    <span v-else class="flex items-center justify-center gap-2">
+      <loader2 :size="24" />
+      loading ...
+    </span>
   </motion.button>
 </template>
 
 <script setup lang="ts">
 import { motion } from "motion-v";
+import { Loader2 } from "lucide-vue-next";
+
 interface Props {
   type?: "button" | "reset" | "submit";
   btnType?: "primary" | "outline";

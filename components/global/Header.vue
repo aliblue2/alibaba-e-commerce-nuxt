@@ -14,7 +14,19 @@
         <NavbarNav class="md:flex hidden" />
         <div class="flex items-center justify-start gap-3">
           <AnimatePresence>
-            <CustomBtn v-on:click-handler="dropDownToggler" btn-type="outline">
+            <CustomBtn
+              v-on:click-handler="dropDownToggler"
+              btn-type="outline"
+              custom-css="md:flex hidden"
+            >
+              {{ allQunatites }}
+              <ShoppingBag :size="20" />
+            </CustomBtn>
+            <CustomBtn
+              btn-type="outline"
+              custom-css="md:hidden flex"
+              v-on:click-handler="router.push('/shop/cart')"
+            >
               {{ allQunatites }}
               <ShoppingBag :size="20" />
             </CustomBtn>

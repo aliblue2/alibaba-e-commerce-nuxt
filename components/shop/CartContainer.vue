@@ -1,36 +1,22 @@
 <template>
-  <motion.div
-    :initial="{
-      top: -200,
-      opacity: 0,
-    }"
-    :exit="{
-      top: -200,
-      opacity: 0,
-    }"
-    :animate="{
-      top: 75,
-      opacity: 1,
-    }"
-    :transition="{
-      type: 'spring',
-      bounce: 0.5,
-      duration: 0.5,
-    }"
-    class="absolute flex-col items-center justify-start gap-3 divide-y-2 divide-primary/50 md:flex hidden z-30 w-[450px] bg-white p-5 rounded-xl shadow-xl border border-primary"
-  >
-    <main class="w-full" v-if="items.length > 0">
+  <section class="bg-white rounded-xl divide-y-2 p-5 shadow-sm my-5">
+    <main class="w-full" v-if="cartItemsList.length > 0">
       <div
-        v-for="item in items"
+        v-for="item in cartItemsList"
         class="flex my-3 items-center relative py-2 border-dashed w-full gap-2 justify-between"
       >
         <img
           :src="item.product.thumbnail"
-          class="w-16 rounded-full bg-gray-200 border border-primary"
+          class="w-20 h-20 rounded-full bg-gray-200 border border-primary"
           :alt="item.product.title"
           loading="lazy"
         />
-        <h6 class="font-medium truncate max-w-44">{{ item.product.title }}</h6>
+        <div class="flex items-center w-full justify-center gap-5">
+          <h6 class="font-medium truncate">{{ item.product.title }}</h6>
+          <h5 class="text-2xl font-medium text-primary">
+            {{ item.product.price }}
+          </h5>
+        </div>
         <div class="flex items-center gap-2">
           <PlusCircle
             :size="20"
@@ -56,27 +42,32 @@
       </div>
     </main>
 
-    <div v-else class="flex flex-col text-primary items-center gap-5">
-      <ShoppingBag class="rotate-45" :size="64" />
-      <span class="text-2xl font-medium">your shopping cart is empty</span>
-    </div>
-  </motion.div>
+    <main
+      class="flex flex-col p-5 items-center text-primary justify-center gap-10"
+      v-else
+    >
+      <ShoppingBag :size="120" class="rotate-45" />
+      <h6 class="text-2xl font-medium">your shopping cart is empty</h6>
+      <CustomBtn v-on:click-handler="router.push('/')">
+        see all products in shops
+      </CustomBtn>
+    </main>
+  </section>
 </template>
 
 <script lang="ts" setup>
-import { motion } from "motion-v";
-import { PlusCircle, MinusCircle, ShoppingBag } from "lucide-vue-next";
+import { ShoppingBag, PlusCircle, MinusCircle } from "lucide-vue-next";
 
 interface Props {
-  items: ProductItem[];
+  cartItemsList: ProductItem[];
 }
 
+const router = useRouter();
 const props = defineProps<Props>();
-const { changeQuantity, clearBasket } = useBasketStore();
-
+const { clearBasket, changeQuantity } = useBasketStore();
 const finalPrice = computed(() => {
   let tempPrice = 0;
-  props.items.map((item) => {
+  props.cartItemsList.map((item) => {
     tempPrice += item.product.price * item.quantity;
   });
   return tempPrice;

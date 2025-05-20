@@ -1,7 +1,6 @@
 <template>
-  <ScopedLoading v-if="isPending" />
-  <ScopedLoading v-else-if="isError" />
-
+  <ProductsPorductListSkeleton v-if="isPending" />
+  <ScopedErrorCompo v-else-if="isError" />
   <section v-else-if="data?.products">
     <ProductsProductList :products="data.products" />
   </section>
