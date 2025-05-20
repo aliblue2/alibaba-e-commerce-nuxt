@@ -1,5 +1,8 @@
 <template>
-  <div class="grid grid-cols-2 md:grid-cols-5 gap-5">
+  <div
+    v-if="products.length > 0"
+    class="grid grid-cols-2 md:grid-cols-5 gap-5 my-10"
+  >
     <motion.div
       @click="openProductInfoPage(product.id)"
       :while-hover="{
@@ -38,10 +41,14 @@
       </button>
     </motion.div>
   </div>
+  <div v-else class="flex flex-col items-center justify-center gap-5 p-5">
+    <ShoppingBag :size="72" class="rotate-45 text-primary" />
+    <p class="text-2xl font-medium my-2">no items found</p>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowRight } from "lucide-vue-next";
+import { ArrowRight, ShoppingBag } from "lucide-vue-next";
 import { motion } from "motion-v";
 import type { Product } from "~/types/products";
 

@@ -1,6 +1,6 @@
 <template>
   <ScopedLoading v-if="isPending" />
-  <ScopedErrorCompo v-else-if="isError" />
+  <ScopedErrorCompo v-else-if="isError" :refetch-fc="refetch" />
   <section v-else-if="data" class="oveflow-hidden">
     <ProductsProductLanding :product="data" />
   </section>
@@ -14,7 +14,7 @@ const route = useRoute();
 
 const productId = parseInt(route.params.id.toString());
 
-const { data, isPending, isError } = useQuery({
+const { data, isPending, isError, refetch } = useQuery({
   queryKey: ["product-id", productId],
   queryFn: () => getProductsInfoById(productId),
 });

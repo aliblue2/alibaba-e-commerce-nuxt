@@ -1,6 +1,6 @@
 <template>
   <ProductsPorductListSkeleton v-if="isPending" />
-  <ScopedErrorCompo v-else-if="isError" />
+  <ScopedErrorCompo v-else-if="isError" :refetch-fc="refetch" />
   <section v-else-if="data?.products">
     <ProductsProductList :products="data.products" />
   </section>
