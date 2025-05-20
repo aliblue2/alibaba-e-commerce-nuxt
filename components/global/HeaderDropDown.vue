@@ -10,6 +10,7 @@
     }"
     :animate="{
       top: 75,
+      right: 30,
       opacity: 1,
     }"
     :transition="{

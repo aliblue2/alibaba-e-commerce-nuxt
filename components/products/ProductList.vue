@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="products.length > 0"
-    class="grid grid-cols-2 md:grid-cols-5 gap-5 my-10"
+    class="grid grid-cols-2 md:grid-cols-5 gap-5 my-5"
   >
     <motion.div
       @click="openProductInfoPage(product.id)"

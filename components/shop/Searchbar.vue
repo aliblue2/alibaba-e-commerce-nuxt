@@ -22,13 +22,17 @@
 <script lang="ts" setup>
 import { SearchIcon } from "lucide-vue-next";
 import { motion } from "motion-v";
+import { useDebounceFn } from "@vueuse/core";
 const route = useRoute();
 const router = useRouter();
 const searchQ = ref(route.query.search ? route.query.search : "");
 
-watch(searchQ, (searchQNewVal, oldVal) => {
-  router.push({
-    query: { search: searchQNewVal },
-  });
-});
+watch(
+  searchQ,
+  useDebounceFn((newVal) => {
+    router.push({
+      query: { ...route.query, search: newVal },
+    });
+  }, 1000)
+);
 </script>
