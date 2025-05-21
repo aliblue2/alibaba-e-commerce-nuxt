@@ -31,8 +31,8 @@ watch(
   searchQ,
   useDebounceFn((newVal) => {
     router.push({
-      query: { ...route.query, search: newVal },
+      query: { search: newVal },
     });
-  }, 1000)
+  }, 500)
 );
 </script>

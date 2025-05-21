@@ -8,9 +8,9 @@
       :while-hover="{
         scale: 1.08,
       }"
-      :key="product.id + index"
+      :key="product.id"
       class="bg-white p-2 rounded-xl shadow-sm cursor-pointer group relative overflow-hidden"
-      v-for="(product, index) in products"
+      v-for="(product, _) in products"
     >
       <div
         class="bg-gray-200 rounded-lg h-44 flex items-center overflow-hidden p-3 justify-center"
@@ -52,13 +52,12 @@ import { ArrowRight, ShoppingBag } from "lucide-vue-next";
 import { motion } from "motion-v";
 import type { Product } from "~/types/products";
 
+const router = useRouter();
 interface Props {
   products: Product[];
 }
 
 defineProps<Props>();
-
-const router = useRouter();
 
 const openProductInfoPage = (productId: number) => {
   router.push(`/shop/${productId}`);
