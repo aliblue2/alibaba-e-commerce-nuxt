@@ -1,14 +1,13 @@
 <template>
-  <div class="flex flex-col items-start justify-start gap-2 w-full">
-    <label :for="name">{{ title }} : </label>
+  <div class="flex flex-col items-start justify-start gap-3 w-full">
+    <label class="font-medium" :for="name">{{ title }} :</label>
     <input
+      class="bg-gray-200 rounded-lg p-2 w-full outline-none border focus:border-primary border-transparent transition-colors duration-300"
       :type="type"
       :name="name"
       :id="name"
-      :required="required"
       :placeholder="placeholder"
       ref="inputRef"
-      class="p-2 w-full bg-gray-100 rounded-lg border outline-none border-transparent focus:border-primary transition-colors duration-300"
       v-model="modelVal"
     />
   </div>
@@ -18,8 +17,8 @@
 interface Props {
   name: string;
   title: string;
-  type?: "text" | "email" | "password" | "date" | "week" | "number" | "tel";
   placeholder: string;
+  type: "text" | "number" | "email" | "password" | "date" | "time" | "tel";
   required?: boolean;
 }
 

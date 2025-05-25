@@ -1,69 +1,47 @@
+import type { LocationQueryValue } from "vue-router";
+import type { ComputedRef } from "vue";
 import type { Product } from "~/types/products";
 
 const baseUrl = "https://dummyjson.com/products";
+
 export const getAllProductsWithQueries = async (
-  sortBy: ComputedRef,
-  order: ComputedRef,
+  order: ComputedRef<string | LocationQueryValue[]>,
+  sortBy: ComputedRef<string | LocationQueryValue[]>,
   limit: number,
-  searchParam: ComputedRef
-): Promise<{ products: Product[]; total: number }> => {
-  const targetUrl =
-    searchParam.value !== ""
-      ? `/search?q=${searchParam.value}`
-      : `?sortBy=${sortBy.value}&&limit=${limit}&&order=${order.value}`;
-  const response = await fetch(baseUrl + targetUrl);
-
-  console.log(baseUrl + targetUrl);
-
-  if (!response.ok) {
-    throw new Error("cant get prodcuts ");
-  }
-
-  const { products, total } = await response.json();
-
-  return {
-    products,
-    total,
-  };
-};
-
-export const getAllProductsWithParams = async (
-  sortBy: ComputedRef,
-  order: ComputedRef,
-  limit: number,
-  searchParam: ComputedRef,
+  searchParam: ComputedRef<string | LocationQueryValue[]>,
   pageNumber: number = 1
 ): Promise<{
   products: Product[];
-  total: number;
   hasMore: boolean;
-  nextPage: number | undefined;
+  nextPage: number | null;
 }> => {
   const skip = (pageNumber - 1) * limit;
   const targetUrl =
     searchParam.value !== ""
-      ? `/search?q=${searchParam.value}`
-      : `?sortBy=${sortBy.value}&&limit=${limit}&&order=${order.value}`;
+      ? `/search?q=${encodeURIComponent(
+          searchParam.value as string
+        )}&limit=${limit}&skip=${skip}`
+      : `?sortBy=${encodeURIComponent(
+          sortBy.value as string
+        )}&order=${encodeURIComponent(
+          order.value as string
+        )}&limit=${limit}&skip=${skip}`;
 
-  const response = await fetch(baseUrl + targetUrl, {
-    headers: {
-      "content-type": "application/json",
-    },
-    cache: "no-store",
-  });
+  const response = await fetch(baseUrl + targetUrl);
 
   if (!response.ok) {
-    throw new Error("cant get prodcuts with this params");
+    throw new Error("cant get all shop products");
   }
 
   const { products, total } = await response.json();
-
   const hasMore = skip + products.length < total;
-  const nextPage = hasMore ? pageNumber + 1 : undefined;
+  const nextPage = hasMore ? pageNumber + 1 : null;
+
+  console.log(hasMore);
+  console.log(nextPage);
 
   return {
     products,
-    total,
     hasMore,
     nextPage,
   };

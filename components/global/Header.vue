@@ -1,15 +1,14 @@
 <template>
-  <motion.header
-    class="h-16 sticky top-0 left-0 z-20"
-    :style="{ backgroundColor: headerColor }"
-  >
+  <motion.header class="h-16 sticky top-0 left-0 z-20 bg-white">
     <Container>
       <div class="flex items-center justify-between gap-5 w-full h-full">
         <div class="flex items-center justify-start gap-5">
           <CustomBtn btn-type="outline" class="md:hidden block">
             <Menu :size="20" />
           </CustomBtn>
-          <img :src="Logo" alt="logo-name" class="max-w-44" />
+          <RouterLink to="/">
+            <img :src="Logo" alt="logo-name" class="max-w-52" />
+          </RouterLink>
         </div>
         <NavbarNav class="md:flex hidden" />
         <div class="flex items-center justify-start gap-3">

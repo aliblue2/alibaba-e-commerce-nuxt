@@ -1,7 +1,6 @@
 <template>
   <div class="bg-white w-full max-w-[600px] mxa-auto p-5 rounded-2xl shadow-sm">
     <form
-      :submit="mutate"
       class="flex flex-col items-center justify-start gap-5 w-10/12 mx-auto"
     >
       <CustomInput
@@ -42,8 +41,6 @@
 
 <script setup lang="ts">
 import { UserPlus2 } from "lucide-vue-next";
-import { signupFcHandler } from "~/requests/auth/signup";
-import { useMutation } from "@tanstack/vue-query";
 
 const emailRef = ref<InstanceType<
   typeof import("~/components/global/CustomInput.vue").default
@@ -56,14 +53,4 @@ const nameRef = ref<InstanceType<
 > | null>();
 
 const loading = ref(false);
-
-const { mutate } = useMutation({
-  mutationKey: ["signup-user"],
-  mutationFn: () =>
-    signupFcHandler(
-      nameRef.value!.modelVal,
-      emailRef.value!.modelVal,
-      passwordRef.value!.modelVal
-    ),
-});
 </script>

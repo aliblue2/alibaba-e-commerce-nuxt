@@ -7,7 +7,7 @@
   --breakpoint-3xl: 120rem;
   --color-primary: #ff6600;
   --color-white-custom: #f4f4f4;
-  --color-black-custom: #f4f4f4;
+  --color-black-custom: #212121;
   --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
   --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
 }

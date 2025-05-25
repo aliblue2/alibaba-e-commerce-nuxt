@@ -5,6 +5,7 @@ export const loginFcHandler = async (email: string, password: string) => {
       email,
       password,
     }),
+    credentials: "include",
   });
 
   if (!response.ok) {

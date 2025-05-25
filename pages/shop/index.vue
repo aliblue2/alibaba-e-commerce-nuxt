@@ -2,40 +2,73 @@
   <section v-if="data">
     <ShopSearchbar />
     <ShopFilterContainer />
-    <ProductsProductList :products="allProdcuts!" />
-    <button @click="fetchNextPage()">load more</button>
+    <ProductsProductList :products="allProducts" />
+    <div ref="loadMoreRef" class="sentinel"></div>
   </section>
   <ProductsPorductListSkeleton v-else-if="isPending" />
-
   <ScopedErrorCompo v-else :refetch-fc="refetch" />
 </template>
 
 <script setup lang="ts">
 import { useInfiniteQuery } from "@tanstack/vue-query";
-import { getAllProductsWithParams } from "~/requests/shop/getAllProductsWithQueries";
-const route = useRoute();
-const sort = computed(() => route.query.sort || "");
-const order = computed(() => route.query.order || "");
-const currentLimit = ref(Number(route.query.limit || 20));
-const search = computed(() => route.query.search || "");
+import { computed, ref, onMounted, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
+import { getAllProductsWithQueries } from "~/requests/shop/getAllProductsWithQueries";
 
-const { data, isPending, fetchNextPage, refetch } = useInfiniteQuery({
-  queryKey: ["shop-products", sort, order, search, currentLimit],
+const route = useRoute();
+const sort = computed(() => route.query.sort || "title");
+const order = computed(() => route.query.order || "asc");
+const search = computed(() => route.query.search || "");
+const limit = ref(Number(route.query.limit || 10));
+
+const loadMoreRef = ref<HTMLElement | null>(null);
+let observer: IntersectionObserver | null = null;
+
+const {
+  data,
+  isPending,
+  isFetchingNextPage,
+  fetchNextPage,
+  refetch,
+  hasNextPage,
+} = useInfiniteQuery({
+  queryKey: ["shop-products", sort, order, search, limit],
   queryFn: ({ pageParam }) =>
-    getAllProductsWithParams(
-      sort,
-      order,
-      currentLimit.value,
-      search,
-      pageParam
-    ),
+    getAllProductsWithQueries(order, sort, limit.value, search, pageParam),
   initialPageParam: 1,
   getNextPageParam: (lastPage) => lastPage.nextPage,
 });
 
-const allProdcuts = computed(() =>
-  data.value?.pages.flatMap((page) => page.products || [])
+const allProducts = computed(
+  () => data.value?.pages.flatMap((page) => page.products) || []
 );
 
-console.log(data.value?.pages.map((page) => page.nextPage));
+onMounted(() => {
+  observer = new IntersectionObserver(
+    (entires) => {
+      if (
+        entires[0].isIntersecting &&
+        hasNextPage.value &&
+        !isFetchingNextPage.value
+      ) {
+        fetchNextPage();
+      }
+    },
+    {
+      rootMargin: "100px",
+    }
+  );
+
+  if (loadMoreRef.value) {
+    observer.observe(loadMoreRef.value);
+  }
+});
+
+onUnmounted(() => {
+  if (observer && loadMoreRef.value) {
+    observer.unobserve(loadMoreRef.value);
+  }
+
+  observer = null;
+});
 </script>
