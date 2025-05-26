@@ -1,85 +1,89 @@
 <template>
-  <div class="bg-white w-full max-w-[600px] mxa-auto p-5 rounded-2xl shadow-sm">
+  <div class="bg-white w-full max-w-[600px] mx-auto p-5 rounded-2xl shadow-sm">
     <form
-      v-on:submit="loginUserHandler"
-      class="flex flex-col items-center justify-start gap-5 w-10/12 mx-auto"
+      @submit.prevent="loginSubmitHandler"
+      class="flex flex-col items-center justify-start w-10/12 gap-3 mx-auto"
     >
       <CustomInput
         name="email"
         type="email"
-        title="email"
+        title="Email"
         placeholder="email@example.com"
-        ref="emailRef"
+        v-model="email"
       />
+      <span
+        class="w-full text-sm font-medium text-red-600"
+        v-if="errors.email"
+        >{{ errors.email }}</span
+      >
       <CustomInput
         name="password"
         type="password"
-        title="password"
-        placeholder="***"
-        ref="passwordRef"
+        title="Password"
+        placeholder="••••••••"
+        v-model="password"
       />
-      <CustomBtn custom-css="w-full" type="submit" :loading="isPending">
-        Login
-        <Loader2 v-if="isPending" class="animate-spin" />
-        <LogInIcon :size="24" />
+      <span
+        class="w-full text-sm font-medium text-red-600"
+        v-if="errors.password"
+        >{{ errors.password }}</span
+      >
+
+      <CustomBtn
+        @click="loginSubmitHandler"
+        :loading="isSubmitting"
+        custom-css="w-full mt-2"
+        type="submit"
+      >
+        <span class="flex items-center justify-center gap-2">
+          <span>Login</span>
+          <LogInIcon :size="20" />
+        </span>
       </CustomBtn>
     </form>
-    <span
-      v-if="isError"
-      class="text-red-500 text-center block mt-5 font-medium"
-      >{{ error?.message }}</span
-    >
   </div>
-  <RouterLink
-    to="/auth?mode=signup"
-    class="text-primary font-medium hover:underline"
-  >
-    Do you have not any aacount ? signup
-  </RouterLink>
+
+  <div class="mt-4 text-center">
+    <RouterLink
+      to="/auth?mode=signup"
+      class="font-medium text-primary hover:underline"
+    >
+      Don't have an account? Sign up
+    </RouterLink>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
 import { LogInIcon } from "lucide-vue-next";
-import { toast } from "vue-sonner";
-import { loginFcHandler } from "~/requests/auth/login";
-import { Loader2 } from "lucide-vue-next";
+import * as yup from "yup";
 
-const emailRef = ref<InstanceType<
-  typeof import("~/components/global/CustomInput.vue").default
-> | null>(null);
-const passwordRef = ref<InstanceType<
-  typeof import("~/components/global/CustomInput.vue").default
-> | null>(null);
+const validationSchema = toTypedSchema(
+  yup.object({
+    email: yup
+      .string()
+      .min(1, "email address is requaired for login ")
+      .email("invalid email address"),
+    password: yup
+      .string()
+      .min(8, "password less than 8 char")
+      .required("password is required"),
+  })
+);
 
-const { mutate, isPending, isError, error } = useMutation({
-  mutationKey: ["login-user"],
-  mutationFn: ({ email, password }: { email: string; password: string }) =>
-    loginFcHandler(email, password),
-  onSuccess: () => {
-    toast.success("you successfully logedin");
-  },
-  onError: (error) => {
-    toast.error(error.message);
+const { errors, isSubmitting, handleSubmit } = useForm({
+  validationSchema,
+  initialValues: {
+    email: "",
+    password: "",
   },
 });
 
-const loginUserHandler = () => {
-  event?.preventDefault();
+const { value: email } = useField("email");
+const { value: password } = useField("password");
 
-  if (!emailRef || !emailRef.value?.modelVal.includes("@")) {
-    toast.error("invalid email address");
-    return;
-  }
+const loginSubmitHandler = handleSubmit((values) => {
+  console.log("submit called");
 
-  if (!passwordRef || passwordRef.value!.modelVal.length < 8) {
-    toast.error("password is short");
-    return;
-  }
-
-  mutate({
-    email: emailRef.value.modelVal.toString(),
-    password: passwordRef.value!.modelVal.toString(),
-  });
-};
+  console.log(values.email);
+});
 </script>

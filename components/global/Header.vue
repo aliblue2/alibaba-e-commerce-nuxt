@@ -14,7 +14,7 @@
         <div class="flex items-center justify-start gap-3">
           <AnimatePresence>
             <CustomBtn
-              v-on:click-handler="dropDownToggler"
+              @click="dropDownToggler"
               btn-type="outline"
               custom-css="md:flex hidden"
             >
@@ -24,7 +24,7 @@
             <CustomBtn
               btn-type="outline"
               custom-css="md:hidden flex"
-              v-on:click-handler="router.push('/shop/cart')"
+             @click="router.push('/shop/cart')"
             >
               {{ allQunatites }}
               <ShoppingBag :size="20" />
@@ -33,7 +33,7 @@
             <HeaderDropDown :items="basketItems" v-if="headerDropDownVis" />
           </AnimatePresence>
 
-          <CustomBtn v-on:click-handler="authToggleBtnClick">
+          <CustomBtn @click="authToggleBtnClick">
             <span class="md:block hidden" v-if="isAuthenticated">profile </span>
             <span class="md:block hidden" v-else>signup/login </span>
             <User2 :size="20" />

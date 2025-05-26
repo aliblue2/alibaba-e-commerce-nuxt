@@ -47,7 +47,7 @@ const emailRef = ref<InstanceType<
 > | null>();
 const passwordRef = ref<InstanceType<
   typeof import("~/components/global/CustomInput.vue").default
-> | null>();
+> | null>(null);
 const nameRef = ref<InstanceType<
   typeof import("~/components/global/CustomInput.vue").default
 > | null>();

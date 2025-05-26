@@ -37,9 +37,6 @@ export const getAllProductsWithQueries = async (
   const hasMore = skip + products.length < total;
   const nextPage = hasMore ? pageNumber + 1 : null;
 
-  console.log(hasMore);
-  console.log(nextPage);
-
   return {
     products,
     hasMore,

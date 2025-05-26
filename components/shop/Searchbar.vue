@@ -25,7 +25,7 @@ import { motion } from "motion-v";
 import { useDebounceFn } from "@vueuse/core";
 const route = useRoute();
 const router = useRouter();
-const searchQ = ref(route.query.search ? route.query.search : "");
+const searchQ = ref(route.query.search || "");
 
 watch(
   searchQ,

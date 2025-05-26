@@ -12,22 +12,22 @@
       bounce: 0.4,
       stiffness: 300,
     }"
+    :class="[customCss, btnClassType]"
     :disabled="loading"
-    class="flex items-center justify-center gap-5 font-medium p-2 rounded-xl transition-colors duration-300 cursor-pointer"
-    :class="[loading && 'bg-gray-300 text-white', customCss, btnClassType]"
-    @click="props.onClickHandler"
+    class="flex items-center justify-center gap-5 font-medium p-2 rounded-xl transition-colors duration-300"
+    @click="handleClick"
   >
     <slot v-if="!loading"></slot>
-    <span v-else class="flex items-center justify-center gap-2">
-      <loader2 :size="24" />
-      loading ...
+    <span v-else class="flex items-center justify-center gap-5">
+      loading
+      <Loader2Icon class="animate-spin" :size="20" />
     </span>
   </motion.button>
 </template>
 
 <script setup lang="ts">
 import { motion } from "motion-v";
-import { Loader2 } from "lucide-vue-next";
+import { Loader2Icon } from "lucide-vue-next";
 
 interface Props {
   type?: "button" | "reset" | "submit";
@@ -45,11 +45,22 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const btnClassType = computed(() => {
-  switch (props.btnType) {
-    case "primary":
-      return "bg-primary text-white";
-    case "outline":
-      return "border border-2 borde-primary hover:bg-primary text-primary hover:text-white ";
-  }
+  if (props.loading) {
+    return "bg-gray-300 text-white font-medium cursor-not-allowed";
+  } else
+    switch (props.btnType) {
+      case "primary":
+        return "bg-primary text-white";
+      case "outline":
+        return "border border-2 borde-primary hover:bg-primary text-primary hover:text-white ";
+    }
 });
+
+const emit = defineEmits(["click"]);
+
+const handleClick = () => {
+  if (!props.loading) {
+    emit("click");
+  }
+};
 </script>

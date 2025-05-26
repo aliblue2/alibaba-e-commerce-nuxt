@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/vue-query";
 import { getAllProductsCategory } from "~/requests/shop/getAllCategories";
 
 const route = useRoute();
-const slug = route.params.slug.toString();
+const slug = route.params.slug as string;
 
 const { data, isPending, isError, refetch } = useQuery({
   queryKey: ["category-slug", slug],
